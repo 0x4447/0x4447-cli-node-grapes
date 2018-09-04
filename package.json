@@ -1,0 +1,40 @@
+{
+  "name": "@0x4447/grapes",
+  "version": "1.0.0",
+  "description": "This is a small framework to make it easier to work with AWS CloudFormation files.",
+  "homepage": "https://0x4447.com/toolbox",
+  "main": "index.js",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "npm pack && npm install -g 0x4447-grapes-* && rm 0x4447-grapes-*",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/0x4447/0x4447-cli-node-grapes"
+  },
+  "bin": {
+    "grapes": "./index.js"
+  },
+  "author": {
+    "name": "0x4447",
+    "email": "hello@0x4447.email",
+    "url": "https://0x4447.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/0x4447/0x4447-cli-node-grapes/issues"
+  },
+  "keywords": [
+    "0x4447",
+    "cli",
+    "CloudFormation",
+    "framework",
+    "aws"
+  ],
+  "dependencies": {
+    "commander": "^2.17.1"
+  }
+}
