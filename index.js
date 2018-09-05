@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+let fs = require('fs');
 let npm = require('./package.json');
 let program = require('commander');
+let recursive = require("recursive-readdir");
 
 //   _____   ______   _______   _______   _____   _   _    _____    _____
 //  / ____| |  ____| |__   __| |__   __| |_   _| | \ | |  / ____|  / ____|
@@ -17,6 +19,8 @@ let program = require('commander');
 program
 	.version(npm.version)
 	.option('-s, --source [type]', 		'path to the folder to upload')
+	.option('-b, --build [type]', 		'path to the folder to upload')
+	.option('-i, --init [type]', 		'path to the folder to upload')
 
 //
 //	React when the user needs help
@@ -37,30 +41,6 @@ program.on('--help', function() {
 program.parse(process.argv);
 
 //
-//	Listen for key preses
-//
-term.on('key', function(name, matches, data ) {
-
-	//
-	//	1.	If we detect CTR+C we kill the app
-	//
-	if(name === 'CTRL_C' )
-	{
-		//
-		//	1. 	Lets make a nice user experience and clean the terminal window
-		//		before closing the app
-		//
-		term.clear();
-
-		//
-		//	->	Kill the app
-		//
-		process.exit();
-	}
-
-});
-
-//
 //	Check if the user provided the dir source where to copy the file from
 //
 if(!program.source)
@@ -78,30 +58,80 @@ if(!program.source)
 //
 
 //
-//	Before we start working, we clean the terminal window
-//
-term.clear();
-
-//
 //	The main container that will be passed around in each chain to collect
 //	all the data and keep it in one place
 //
 let container = {
-	dir: process.cwd() + "/" + program.source,
-	region: 'us-east-1',
-	ask_for_credentials: true,
-	got_cli_credentials: false
+	//
+	//
+	//
+	dir: {
+		parameters: process.cwd() + "/" + program.source + "/01_Parameters",
+		conditions: process.cwd() + "/" + program.source + "/02_Conditions",
+		resources: 	process.cwd() + "/" + program.source + "/03_Resources",
+		outputs: 	process.cwd() + "/" + program.source + "/04_Output",
+	},
+	//
+	//
+	//
+	save_to: process.cwd() + "/" + program.source + "/CloudFormation.json",
+	//
+	//
+	//
+	skip: [".DS_Store", "README.md"],
+	//
+	//
+	//
+	files: {},
+	//
+	//
+	//
+	jsons: {
+		parameters: [],
+		conditions: [],
+		resources: 	[],
+		outputs: 	[]
+	},
+	//
+	//
+	//
+	final_json: {
+		Parameters: {},
+		Conditions: {},
+		Resources: 	{},
+		Outputs: 	{}
+	}
 };
 
 //
 //	Start the chain
 //
-start(container)
+get_the_parameters(container)
 	.then(function(container) {
 
-		term("\n\n");
-		term("\tDone!");
-		term("\n\n");
+		return get_the_conditions(container);
+
+	}).then(function(container) {
+
+		return get_the_resources(container);
+
+	}).then(function(container) {
+
+		return get_the_outputs(container);
+
+	}).then(function(container) {
+
+		return read_all_the_files(container);
+
+	}).then(function(container) {
+
+		return merge_all_in_to_one(container);
+
+	}).then(function(container) {
+
+		return save_to_disk(container);
+
+	}).then(function(container) {
 
 		//
 		//	->	Exit the app
@@ -111,18 +141,9 @@ start(container)
 	}).catch(function(error) {
 
 		//
-		//	1.	Clear the screen of necessary text
+		//	<>> Debug
 		//
-		term.clear();
-
-		term("\n\n");
-
-		//
-		//	2.	Show the error message
-		//
-		term.red("\t" + error);
-
-		term("\n\n");
+		console.log(error);
 
 		//
 		//	->	Exit the app
@@ -140,13 +161,119 @@ start(container)
 //
 
 //
-//	Query the EC2 Instance Metadata to find out if a IAM Role is attached
-//	to the instance, this way we can either ask the user for credentials
-//	or let the SDK use the Role attached to the EC2 Instance
 //
-function start(container)
+//
+function get_the_parameters(container)
 {
 	return new Promise(function(resolve, reject) {
+
+		recursive(container.dir.parameters, container.skip, function (err, files) {
+
+			//
+			//
+			//
+			container.files.parameters = files;
+
+			//
+			//	-> Move to the next chain
+			//
+			return resolve(container);
+
+		});
+
+	});
+}
+
+//
+//
+//
+function get_the_conditions(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		recursive(container.dir.conditions, container.skip, function (err, files) {
+
+			//
+			//
+			//
+			container.files.conditions = files;
+
+			//
+			//	-> Move to the next chain
+			//
+			return resolve(container);
+
+		});
+
+	});
+}
+
+//
+//
+//
+function get_the_resources(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		recursive(container.dir.resources, container.skip, function (err, files) {
+
+			//
+			//
+			//
+			container.files.resources = files;
+
+			//
+			//	-> Move to the next chain
+			//
+			return resolve(container);
+
+		});
+
+	});
+}
+
+//
+//
+//
+function get_the_outputs(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		recursive(container.dir.outputs, container.skip, function (err, files) {
+
+			//
+			//
+			//
+			container.files.outputs = files;
+
+			//
+			//	-> Move to the next chain
+			//
+			return resolve(container);
+
+		});
+
+	});
+}
+
+//
+//
+//
+function read_all_the_files(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		for(folder in container.files)
+		{
+			//
+			//
+			//
+			container.files[folder].forEach(function(file) {
+
+				container.jsons[folder].push(require(file));
+
+			});
+		}
 
 		//
 		//	-> Move to the next chain
@@ -154,4 +281,67 @@ function start(container)
 		return resolve(container);
 
 	});
+}
+
+//
+//
+//
+function merge_all_in_to_one(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		for(folder in container.jsons)
+		{
+			for(index in container.jsons[folder])
+			{
+				for(key in container.jsons[folder][index])
+				{
+					container.final_json[capitalize_first_letter(folder)][key] = container.jsons[folder][index][key]
+				}
+			}
+		}
+
+		//
+		//	-> Move to the next chain
+		//
+		return resolve(container);
+
+	});
+}
+
+//
+//
+//
+function save_to_disk(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		//
+		//	1.	
+		//
+		let file = JSON.stringify(container.final_json, null, "\t");
+
+		//
+		//	3.	Create a File Descriptor based on the path that we made
+		//		so the system knows where and how this file should behave
+		//
+		let fd = fs.openSync(container.save_to, 'w')
+
+		//
+		//	4.	Write the page on disk
+		//
+		fs.writeSync(fd, file, 0, file.length);
+
+		//
+		//	-> Move to the next chain
+		//
+		return resolve(container);
+
+	});
+}
+
+
+function capitalize_first_letter(string)
+{
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }

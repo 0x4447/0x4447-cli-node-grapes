@@ -35,6 +35,7 @@
     "aws"
   ],
   "dependencies": {
-    "commander": "^2.17.1"
+    "commander": "^2.17.1",
+    "recursive-readdir": "^2.2.2"
   }
 }
