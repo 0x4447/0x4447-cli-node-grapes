@@ -28,7 +28,13 @@ We hope that Grapes will make your wokr with CloudFormation much easier.
 
 # What to Expect
 
+### Build
+
 Expect a `CloudFormation.json` file appear in the folder that you pointed using the `-s` parameter. The file will contain the final CloudFormation file that you can upload straight to AWS for deployment.
+
+### Init
+
+Expect a complete folder structure in the path that you specifie in the CLI. THe end result is the exact structure that Graps expects when building the final file. DO not change the folder name, while the file name is irrelevant. Make sure the files are proper JSON files.
 
 # The End
 
