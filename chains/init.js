@@ -1,7 +1,7 @@
 let fs = require('fs');
 
 //
-//
+//	This chain will create the fodler structure
 //
 module.exports = function(container) {
 
@@ -45,6 +45,24 @@ module.exports = function(container) {
 function folder_structure(container)
 {
 	return new Promise(function(resolve, reject) {
+
+		//
+		//	1.	Loop over all the folder that we read, and create the whole
+		//		structure.
+		//
+		for(folder in container.dir)
+		{
+			//
+			//	1.	Check if the folder dose not exists
+			//
+			if(!fs.existsSync(container.dir[folder]))
+			{
+				//
+				//	1.	Make the folder only when it is not present.
+				//
+				fs.mkdirSync(container.dir[folder]);
+			}
+		}
 
 		//
 		//	-> Move to the next chain

@@ -41,15 +41,6 @@ program.on('--help', function() {
 //
 program.parse(process.argv);
 
-//
-//	Check if the user provided the dir source where to copy the file from.
-//
-if(!program.source)
-{
-	console.log('Missing source');
-	process.exit(0);
-}
-
 //	 __  __              _____   _   _
 //	|  \/  |     /\     |_   _| | \ | |
 //	| \  / |    /  \      | |   |  \| |
@@ -57,6 +48,11 @@ if(!program.source)
 //	| |  | |  / ____ \   _| |_  | |\  |
 //	|_|  |_| /_/    \_\ |_____| |_| \_|
 //
+
+//
+//	Set the work location of the CLI
+//
+let location = program.source || program.init;
 
 //
 //	The main container that will be passed around in each chain to collect
@@ -68,19 +64,19 @@ let container = {
 	//	all the data.
 	//
 	dir: {
-		description: 	process.cwd() + "/" + program.source + "/01_Description",
-		metadata: 		process.cwd() + "/" + program.source + "/01_Metadata",
-		parameters: 	process.cwd() + "/" + program.source + "/01_Parameters",
-		mappings: 		process.cwd() + "/" + program.source + "/02_Mappings",
-		conditions: 	process.cwd() + "/" + program.source + "/03_Conditions",
-		transform: 		process.cwd() + "/" + program.source + "/04_Transform",
-		resources: 		process.cwd() + "/" + program.source + "/04_Resources",
-		outputs: 		process.cwd() + "/" + program.source + "/05_Output",
+		description: 	process.cwd() + "/" + location + "/01_Description",
+		metadata: 		process.cwd() + "/" + location + "/02_Metadata",
+		parameters: 	process.cwd() + "/" + location + "/03_Parameters",
+		mappings: 		process.cwd() + "/" + location + "/04_Mappings",
+		conditions: 	process.cwd() + "/" + location + "/05_Conditions",
+		transform: 		process.cwd() + "/" + location + "/06_Transform",
+		resources: 		process.cwd() + "/" + location + "/07_Resources",
+		outputs: 		process.cwd() + "/" + location + "/08_Output",
 	},
 	//
 	//	The path where to save the end result
 	//
-	save_to: process.cwd() + "/" + program.source + "/CloudFormation.json",
+	save_to: process.cwd() + "/" + location + "/CloudFormation.json",
 	//
 	//	Files that needs to be skiped when we read the content of the dirs
 	//
@@ -124,6 +120,11 @@ let container = {
 //
 cross_road(container)
 	.then(function(container) {
+
+		//
+		//	1.	Notify that we finished working
+		//
+		console.log("Done!");
 
 		//
 		//	->	Exit the app.
