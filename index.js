@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 
-let fs = require('fs');
 let npm = require('./package.json');
 let program = require('commander');
-let recursive = require("recursive-readdir");
+
+let init = require('./chains/init');
+let build = require('./chains/build');
 
 //   _____   ______   _______   _______   _____   _   _    _____    _____
 //  / ____| |  ____| |__   __| |__   __| |_   _| | \ | |  / ____|  / ____|
@@ -14,7 +15,7 @@ let recursive = require("recursive-readdir");
 //
 
 //
-//	The CLI options for this app. At this moment we just support Version
+//	The CLI options for this app. At this moment we just support Version.
 //
 program
 	.version(npm.version)
@@ -23,25 +24,25 @@ program
 	.option('-i, --init [type]', 		'path to the folder to upload')
 
 //
-//	React when the user needs help
+//	React when the user needs help.
 //
 program.on('--help', function() {
 
 	//
 	//	Just add an empty line at the end of the help to make the text more
-	//	clear to the user
+	//	clear to the user.
 	//
 	console.log("");
 
 });
 
 //
-//	Pass the user input to the module
+//	Pass the user input to the module.
 //
 program.parse(process.argv);
 
 //
-//	Check if the user provided the dir source where to copy the file from
+//	Check if the user provided the dir source where to copy the file from.
 //
 if(!program.source)
 {
@@ -59,94 +60,85 @@ if(!program.source)
 
 //
 //	The main container that will be passed around in each chain to collect
-//	all the data and keep it in one place
+//	all the data and keep it in one place.
 //
 let container = {
 	//
-	//
+	//	A list of all the dirrectories that we have to scan to get
+	//	all the data.
 	//
 	dir: {
-		parameters: process.cwd() + "/" + program.source + "/01_Parameters",
-		conditions: process.cwd() + "/" + program.source + "/02_Conditions",
-		resources: 	process.cwd() + "/" + program.source + "/03_Resources",
-		outputs: 	process.cwd() + "/" + program.source + "/04_Output",
+		description: 	process.cwd() + "/" + program.source + "/01_Description",
+		metadata: 		process.cwd() + "/" + program.source + "/01_Metadata",
+		parameters: 	process.cwd() + "/" + program.source + "/01_Parameters",
+		mappings: 		process.cwd() + "/" + program.source + "/02_Mappings",
+		conditions: 	process.cwd() + "/" + program.source + "/03_Conditions",
+		transform: 		process.cwd() + "/" + program.source + "/04_Transform",
+		resources: 		process.cwd() + "/" + program.source + "/04_Resources",
+		outputs: 		process.cwd() + "/" + program.source + "/05_Output",
 	},
 	//
-	//
+	//	The path where to save the end result
 	//
 	save_to: process.cwd() + "/" + program.source + "/CloudFormation.json",
 	//
-	//
+	//	Files that needs to be skiped when we read the content of the dirs
 	//
 	skip: [".DS_Store", "README.md"],
 	//
-	//
+	//	This object will hold all the dirrect paths to the files, that
+	//	later on needs to be read.
 	//
 	files: {},
 	//
-	//
+	//	The content of all the files that we read
 	//
 	jsons: {
+		description:[],
+		metadata: 	[],
 		parameters: [],
+		mappings: 	[],
 		conditions: [],
+		transform: 	[],
 		resources: 	[],
 		outputs: 	[]
 	},
 	//
-	//
+	//	This object is the final structure of the CloudFormation file.
 	//
 	final_json: {
+		AWSTemplateFormatVersion: "2010-09-09",
+		Description:{},
+		Metadata: 	{},
 		Parameters: {},
+		Mappings: 	{},
 		Conditions: {},
+		Transform: 	{},
 		Resources: 	{},
 		Outputs: 	{}
 	}
 };
 
 //
-//	Start the chain
+//	Start the chain.
 //
-get_the_parameters(container)
+cross_road(container)
 	.then(function(container) {
 
-		return get_the_conditions(container);
-
-	}).then(function(container) {
-
-		return get_the_resources(container);
-
-	}).then(function(container) {
-
-		return get_the_outputs(container);
-
-	}).then(function(container) {
-
-		return read_all_the_files(container);
-
-	}).then(function(container) {
-
-		return merge_all_in_to_one(container);
-
-	}).then(function(container) {
-
-		return save_to_disk(container);
-
-	}).then(function(container) {
-
 		//
-		//	->	Exit the app
+		//	->	Exit the app.
 		//
 		process.exit();
 
 	}).catch(function(error) {
 
 		//
-		//	<>> Debug
+		//	<>> Debug.
 		//
 		console.log(error);
 
 		//
-		//	->	Exit the app
+		//	->	Exit the app.
 		//
 		process.exit(-1);
 
@@ -161,187 +153,27 @@ get_the_parameters(container)
 //
 
 //
+//	Decide what do to based on the parameters set by the user.
 //
-//
-function get_the_parameters(container)
+function cross_road(container)
 {
 	return new Promise(function(resolve, reject) {
 
-		recursive(container.dir.parameters, container.skip, function (err, files) {
-
-			//
-			//
-			//
-			container.files.parameters = files;
-
-			//
-			//	-> Move to the next chain
-			//
-			return resolve(container);
-
-		});
-
-	});
-}
-
-//
-//
-//
-function get_the_conditions(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		recursive(container.dir.conditions, container.skip, function (err, files) {
-
-			//
-			//
-			//
-			container.files.conditions = files;
-
-			//
-			//	-> Move to the next chain
-			//
-			return resolve(container);
-
-		});
-
-	});
-}
-
-//
-//
-//
-function get_the_resources(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		recursive(container.dir.resources, container.skip, function (err, files) {
-
-			//
-			//
-			//
-			container.files.resources = files;
-
-			//
-			//	-> Move to the next chain
-			//
-			return resolve(container);
-
-		});
-
-	});
-}
-
-//
-//
-//
-function get_the_outputs(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		recursive(container.dir.outputs, container.skip, function (err, files) {
-
-			//
-			//
-			//
-			container.files.outputs = files;
-
-			//
-			//	-> Move to the next chain
-			//
-			return resolve(container);
-
-		});
-
-	});
-}
-
-//
-//
-//
-function read_all_the_files(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		for(folder in container.files)
+		//
+		//	1.	Check if we want to build the CloudFormation file.
+		//
+		if(program.build)
 		{
-			//
-			//
-			//
-			container.files[folder].forEach(function(file) {
-
-				container.jsons[folder].push(require(file));
-
-			});
+			return build(container);
 		}
 
 		//
-		//	-> Move to the next chain
+		//	2.	Check if we want to create a folder structure.
 		//
-		return resolve(container);
-
-	});
-}
-
-//
-//
-//
-function merge_all_in_to_one(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		for(folder in container.jsons)
+		if(program.init)
 		{
-			for(index in container.jsons[folder])
-			{
-				for(key in container.jsons[folder][index])
-				{
-					container.final_json[capitalize_first_letter(folder)][key] = container.jsons[folder][index][key]
-				}
-			}
+			return init(container);
 		}
 
-		//
-		//	-> Move to the next chain
-		//
-		return resolve(container);
-
 	});
-}
-
-//
-//
-//
-function save_to_disk(container)
-{
-	return new Promise(function(resolve, reject) {
-
-		//
-		//	1.	
-		//
-		let file = JSON.stringify(container.final_json, null, "\t");
-
-		//
-		//	3.	Create a File Descriptor based on the path that we made
-		//		so the system knows where and how this file should behave
-		//
-		let fd = fs.openSync(container.save_to, 'w')
-
-		//
-		//	4.	Write the page on disk
-		//
-		fs.writeSync(fd, file, 0, file.length);
-
-		//
-		//	-> Move to the next chain
-		//
-		return resolve(container);
-
-	});
-}
-
-
-function capitalize_first_letter(string)
-{
-    return string.charAt(0).toUpperCase() + string.slice(1);
 }
