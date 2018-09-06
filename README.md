@@ -6,8 +6,6 @@ By braking donw the whole CloudFormation structure in to smaller chunks it made 
 
 We hope that Grapes will make your wokr with CloudFormation much easier.
 
-# WORK IN PROGRESS
-
 # How to Install
 
 ```
@@ -34,7 +32,7 @@ Expect a `CloudFormation.json` file appear in the folder that you pointed using 
 
 ### Init
 
-Expect a complete folder structure in the path that you specifie in the CLI. THe end result is the exact structure that Graps expects when building the final file. DO not change the folder name, while the file name is irrelevant. Make sure the files are proper JSON files.
+Expect a complete folder structure in the path that you specifie in the CLI. THe end result is the exact structure that Graps expects when building the final file. Do not change the folder name, while the file name is irrelevant. Make sure the files are proper JSON files.
 
 # The End
 
