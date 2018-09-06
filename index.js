@@ -19,9 +19,9 @@ let build = require('./chains/build');
 //
 program
 	.version(npm.version)
-	.option('-s, --source [type]', 		'path to the folder to upload')
-	.option('-b, --build [type]', 		'path to the folder to upload')
-	.option('-i, --init [type]', 		'path to the folder to upload')
+	.option('-s, --source [type]', 		'path to the CF project folder')
+	.option('-b, --build [type]', 		'build the final file')
+	.option('-i, --init [type]', 		'initiate the folder structure')
 
 //
 //	React when the user needs help.
