@@ -51,6 +51,10 @@ module.exports = function(container) {
 
 			}).then(function(container) {
 
+				return remove_empty_keys(container);
+
+			}).then(function(container) {
+
 				return save_to_disk(container);
 
 			}).then(function(container) {
@@ -507,6 +511,64 @@ function merge_all_in_to_one(container)
 				{
 					container.final_json[capitalize_first_letter(folder)][key] = container.jsons[folder][index][key]
 				}
+			}
+		}
+
+		//
+		//	-> Move to the next chain
+		//
+		return resolve(container);
+
+	});
+}
+
+//
+//	Go over the object and look for main keys that are empty
+//
+function remove_empty_keys(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		//
+		//	1.	Loop over the final object to look for empty
+		//		kees that needs to be removed since AWS dose
+		//		not like empty keys.
+		//
+		for(folder in container.final_json)
+		{
+			//
+			//	1.	Set a variable that will monitor if we 
+			//		found an empty key.
+			//
+			let empty = true;
+
+			//
+			//	2.	See if we can loop over a main key.
+			//
+			for(key in container.final_json[folder])
+			{
+				//
+				//	1.	Mark that there is something withi
+				//		the main key
+				//
+				empty = false;
+
+				//
+				//	->	And stop the loop so we don't waste
+				//		CPU cycles.
+				//
+				break;
+			}
+
+			//
+			//	3.	Check if the main key is empty or not.
+			//
+			if(empty)
+			{
+				//
+				//	1.	Delete the empty key from the object.
+				//
+				delete container.final_json[folder];
 			}
 		}
 
