@@ -12,7 +12,7 @@ module.exports = function(container) {
 		//
 		//	Start the chain
 		//
-		get_the_description(container)
+		prepare_description(container)
 			.then(function(container) {
 
 				return get_the_metadata(container);
@@ -86,9 +86,13 @@ module.exports = function(container) {
 //
 
 //
-//	Read the content of the Description folder.
+//	Read the content of the Description folder, and set it to the final
+//	JSON object. 
+//	
+//	This is an edge case situation, since the description dosn't have
+//	keys within itself, it is a root key.
 //
-function get_the_description(container)
+function prepare_description(container)
 {
 	return new Promise(function(resolve, reject) {
 
@@ -104,30 +108,28 @@ function get_the_description(container)
 		}
 
 		//
-		//	2.	Read the content of the selected folder to get all the
-		//		paths to the JSON files.
+		//	2.	Read the text file containing the description of the
+		//		CF file. This a edge case and in this case there
+		//		is jsut a regular txt file to read as a whole.
 		//
-		recursive(container.dir.description, container.skip, function (error, files) {
+		let raw_description = fs.readFileSync(container.dir.description + "/description.txt");
 
-			//
-			//	1.	Check for internal erros
-			//
-			if(error)
-			{
-				return reject(error);
-			}
-		
-			//
-			//	2.	Save the result in the container for the next promise.
-			//
-			container.files.description = files;
+		//
+		//	3.	Convert the buffer to a string, and remove white spaces
+		//		from the beginning and end.
+		//
+		let description = raw_description.toString().trim();
 
-			//
-			//	-> Move to the next chain
-			//
-			return resolve(container);
+		//
+		//	4.	Set the content of the description file to the
+		//		final JSON.
+		//
+		container.final_json.Description = description;
 
-		});
+		//
+		//	-> Move to the next chain
+		//
+		return resolve(container);
 
 	});
 }

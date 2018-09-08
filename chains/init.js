@@ -13,6 +13,10 @@ module.exports = function(container) {
 		folder_structure(container)
 			.then(function(container) {
 
+				return create_descriptin_file(container);
+
+			}).then(function(container) {
+
 				//
 				//	->	Exit the chain
 				//
@@ -40,7 +44,7 @@ module.exports = function(container) {
 //
 
 //
-//
+//	Create the folder structure needed for this framework to work
 //
 function folder_structure(container)
 {
@@ -63,6 +67,39 @@ function folder_structure(container)
 				fs.mkdirSync(container.dir[folder]);
 			}
 		}
+
+		//
+		//	-> Move to the next chain
+		//
+		return resolve(container);
+
+	});
+}
+
+//
+//	Crate default description file to show how the description
+//	section works
+//
+function create_descriptin_file(container)
+{
+	return new Promise(function(resolve, reject) {
+
+		//
+		//	1.	Default content of the description file, use as an 
+		//		example.
+		//
+		let string = "This is a default description made by Grapse.";
+
+		//
+		//	2.	Create a File Descriptor based on the path that we made
+		//		so the system knows where and how this file should behave
+		//
+		let fd = fs.openSync(container.dir.description + "/description.txt", 'w');
+
+		//
+		//	3.	Write the page on disk
+		//
+		fs.writeSync(fd, string, 0, string.length);
 
 		//
 		//	-> Move to the next chain
