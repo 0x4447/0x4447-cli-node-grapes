@@ -1,7 +1,7 @@
 {
   "name": "@0x4447/grapes",
   "version": "1.0.0",
-  "description": "This is a small framework to make it easier to work with AWS CloudFormation files.",
+  "description": "🍇 This is a small framework to make it easier to work with AWS CloudFormation files.",
   "homepage": "https://0x4447.com/toolbox",
   "main": "index.js",
   "publishConfig": {
