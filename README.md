@@ -1,10 +1,10 @@
 # 🍇 Grapes
 
-This CLI tool was created after the incresing frustration while working on massive CloudFormation file. What AWS did is amazing, but working on one gigantic file is to labour intensive and prone to mistakes. That is why we decided to create  Grapes.
+We created the Grapes CLI tool after experiencing increasing frustration as we worked with a massive CloudFormation file. While what AWS CloudFormation do amazed us, working withn one gigantic file became too labor intensive and prone to errors. At that point, we decided to create Grapes.
 
-By braking down the whole CloudFormation file structure in to smaller chunks, it is much easier to reazon and work with.
+Grapes gave us the ability to break down the entire CloudFormation file structure into smaller chunks, which made it much easier to reason out issues and work with the file.
 
-We hope you'll find Grapes useful.
+We hope you'll find Grapes useful, too!
 
 # How to Install
 
