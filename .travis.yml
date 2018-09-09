@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- 8
+- 7
+script:
+- make test
+deploy:
+  provider: npm
+  email: hello@0x4447.com
+  api_key:
+    secure: YYsVa6ENdRWecfzbSgY7c0fdqNjVe9VqyT1PoWiNZovfDwt182SplPCoUvvFsl57rtJTGBnKu/iUkwV+GCU+aLfZO8c0FmSI4lIwCjjlmO65IULNRmqxQKPdum/FyktwDIKu5/7EurTeNI75lAb8IFKdUkr8qHLvAcuMNTIOELatEktY25u+yTbtWWHK1Vjz5OVrv0uNh4N1Ia9JTW+Ui7qy+zy0LnnT0qLRCUj0VFJOvYb/6qX5kwE/xJE8UE6kL3dDo6PxnE9qfCnTd8Np7Q6PtLsVG23CoKdlaUoXDGLskl+EojdrSgcDEDBlfGhsLIUgGsJH3nYR2ohZK4hCXn4lCUf3wXIwYr1hxibQqWMaEW8K7wyxU+kzpJI23qDVT6DRXxyzcLVIhjaLpvNXEqQ3THqsG81gyaHEjCLkUG6lXYXq0kSo0t1yKCRWAH4Fg0bRuKiU79SQwrQORQoTvFQoREfqBwxqSACO/hxog5gzinqZMhPbXUZLTMcheAqBIrtWLtXPEt36YL/HQYak1gylayRqP8cDebv842ovEdToXVAOJ94D/WtmEZKE5Y9oB/AHfjdGZfBHR1n8bKCQWvj71pwdXh2FAZtVsR1AAVoTcEBnjoskfgVW3ku5nMr3R1QKGWEbRdLeC6u5bc1hIdgd+HSOpCnUr56MfCUfcVY=
+  on:
+    tags: false
+    branch: master
+    repo: 0x4447/0x4447-cli-node-grapes
+    node_js: '8'
