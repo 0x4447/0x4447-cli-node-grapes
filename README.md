@@ -34,7 +34,7 @@ When you use the build feature, a `CloudFormation.json` file appears in the fold
 
 ### The init feature
 
-The initialization command creates a complete folder structure in the path you specified. The end result is the exact structure that Grapes expects when building the final file. The only requirement for the tool is that you never change folder names. Anything inside the folders is up to you. You can name your files anything you like and organize them in whatever folder structure makes sense to you.
+The initialization command creates a complete folder structure in the path you specified. The end result is the exact structure that Grapes expects when building the final file. The only requirement for the tool is that you never change the root folder names. Anything inside those folders is up to you. You can name your files anything you like and organize them in whatever folder structure makes sense to you.
 
 # The End
 
