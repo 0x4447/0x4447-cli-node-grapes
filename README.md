@@ -1,10 +1,10 @@
 # 🍇 Grapes
 
-The Grapes CLI tool was created after experiencing increasing frustration while working with massive CloudFormation file. While we are amazed by what AWS CloudFormation can do and how it helps us manage the AWS infrastructure, working with one gigantic file is too labor intensive and prone to countless errors and frustration. 
+The Grapes CLI tool was created after we experienced increasing frustration as we worked with a massive CloudFormation file. We're amazed by what AWS CloudFormation can do and the way it helps with managing the AWS infrastructure, but working with one gigantic file is too labor intensive and prone to countless errors and endless frustration. 
 
-We decided to do something about this, and create Grapes, a simple CLI tools which will cut down your time in creating a Stack in hals, and will make the whole process more enjoyable and easy to organize, and extend.
+We decided to do something about this. The end result is Grapes, a simple CLI tool that cuts the amount of time spent creating a stack in half. It makes the entire process more enjoyable, in addition to making it easy to organize and extend.
 
-Grapes gives you the ability to break down the entire CloudFormation file structure into smaller chunks, which makes it much easier to reason about. You can literally organize the folder structure however makes sense to you – no constrains.
+Grapes enables you to break down the entire CloudFormation file structure into smaller chunks so it becomes much easier to reason about it. You can literally organize the folder structure in any way that makes sense to you – no constraints.
 
 We use Grapes almost every day, and we hope you will too.
 
@@ -26,15 +26,15 @@ We use Grapes almost every day, and we hope you will too.
 ] grapes -h
 ```
 
-# What to Expect
+# What to expect
 
 ### The build feature
 
-When using the build feature a `CloudFormation.json` file will appear in the folder that you pointed using the `-s` parameter. The file will contain the final CloudFormation file that you can upload straight to AWS for deployment. This file will be overwritten very time you run the `build` command.
+When you use the build feature, a `CloudFormation.json` file appears in the folder you pointed to using the `-s` parameter. The file contains the final CloudFormation file, which you can then upload straight to AWS for deployment. This file is overwritten every time you run the `build` command.
 
 ### The init feature
 
-The initialization command will create a complete folder structure in the path that you specified. The end result is the exact structure that Graps expects when building the final file. Do not change the folder names, this is the only requirement for the tool. Anything inside this folders is up to you. You can name your files however you want and you can organize them in whatever folder structure makes sense to you.
+The initialization command creates a complete folder structure in the path you specified. The end result is the exact structure that Grapes expects when building the final file. The only requirement for the tool is that you never change folder names. Anything inside the folders is up to you. You can name your files anything you like and organize them in whatever folder structure makes sense to you.
 
 # The End
 
