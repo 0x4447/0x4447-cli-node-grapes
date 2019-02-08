@@ -1,6 +1,6 @@
 # 🍇 Grapes
 
-The Grapes CLI tool was created after we experienced increasing frustration as we worked with a massive CloudFormation file. We're amazed by what AWS CloudFormation can do and the way it helps with managing the AWS infrastructure, but working with one gigantic file is too labor intensive and prone to countless errors and endless frustration. 
+The Grapes CLI tool was created after we experienced increasing frustration as we worked with a massive CloudFormation file. We're amazed by what AWS CloudFormation can do and the way it helps with managing the AWS infrastructure, but working with one gigantic file is too labor intensive and prone to countless errors and endless frustration.
 
 We decided to do something about this. The end result is Grapes, a simple CLI tool that cuts the amount of time spent creating a stack in half. It makes the entire process more enjoyable, in addition to making it easy to organize and extend.
 
@@ -30,7 +30,7 @@ We use Grapes almost every day, and we hope you will too.
 
 ### The build feature
 
-When you use the build feature, a `CloudFormation.json` file appears in the folder you pointed to using the `-s` parameter. The file contains the final CloudFormation file, which you can then upload straight to AWS for deployment. This file is overwritten every time you run the `build` command.
+Every time you run the command, a `CloudFormation.json` file appears in the folder you pointed to using the `-s` parameter. The file contains the final CloudFormation file, which you can then upload straight to AWS for deployment. This file is overwritten every time you run Grapes.
 
 ### The init feature
 
