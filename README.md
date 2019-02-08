@@ -17,7 +17,7 @@ We use Grapes almost every day, and we hope you will too.
 # How to Use
 
 ```
-] grapes -b -s .
+] grapes -s .
 ```
 
 # Where to get Help
