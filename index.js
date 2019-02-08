@@ -19,8 +19,8 @@ let build = require('./chains/build');
 //
 program
 	.version(npm.version)
-	.option('-s, --source [type]', 		'path to the CF project folder')
-	.option('-b, --build [type]', 		'build the final file')
+	.option('-s, --source [type]', 		'path to the source CF project folder')
+	.option('-d, --destination [type]', 'path to the destination CF project folder')
 	.option('-i, --init [type]', 		'initiate the folder structure')
 
 //
@@ -50,9 +50,10 @@ program.parse(process.argv);
 //
 
 //
-//	Set the work location of the CLI
+//	Set the work location of the CLI which depends if we are initializing
+//	a structure or we are building one.
 //
-let location = program.source || program.init;
+let location = program.source || program.destination;
 
 //
 //	The main container that will be passed around in each chain to collect
@@ -161,20 +162,18 @@ function cross_road(container)
 	return new Promise(function(resolve, reject) {
 
 		//
-		//	1.	Check if we want to build the CloudFormation file.
-		//
-		if(program.build)
-		{
-			return build(container);
-		}
-
-		//
-		//	2.	Check if we want to create a folder structure.
+		//	1.	Check if we want to create a folder structure.
 		//
 		if(program.init)
 		{
 			return init(container);
 		}
+
+		//
+		//	2.	and if not init is specified we assume we want to build
+		//		by default.
+		//
+		return build(container);
 
 	});
 }
