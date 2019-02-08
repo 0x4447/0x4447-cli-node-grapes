@@ -32,7 +32,7 @@ module.exports = function(container) {
 			});
 
 	});
-	
+
 }
 
 //  _____    _____     ____    __  __   _____    _____   ______    _____
@@ -85,10 +85,10 @@ function create_descriptin_file(container)
 	return new Promise(function(resolve, reject) {
 
 		//
-		//	1.	Default content of the description file, use as an 
+		//	1.	Default content of the description file, use as an
 		//		example.
 		//
-		let string = "This is a default description made by Grapse.";
+		let string = "This is a default description made by Grapse. Sponsored by 0x4447.com";
 
 		//
 		//	2.	Create a File Descriptor based on the path that we made
