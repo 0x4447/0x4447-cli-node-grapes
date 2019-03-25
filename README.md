@@ -8,6 +8,11 @@ Grapes enables you to break down the entire CloudFormation file structure into s
 
 We use Grapes almost every day, and we hope you will too.
 
+# Examples
+
+- [0x4447-product-s3-email](https://github.com/0x4447/0x4447-product-s3-email)
+- [0x4447-product-vpn-contained-IPSec-basic](https://github.com/0x4447/0x4447-product-vpn-contained-IPSec-basic)
+
 # How to Install
 
 ```
@@ -17,7 +22,7 @@ We use Grapes almost every day, and we hope you will too.
 # How to Use
 
 ```
-] grapes -s .
+] grapes -s PATH_TO_FOLDER
 ```
 
 # Where to get Help
